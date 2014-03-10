@@ -6,8 +6,8 @@ This script let you can use CTRL-P/N to complete word in cmdline mode
 for instance :
             1.   :something<C-P>
             2.   /else<C-N>
-      
-you also can map other keys instead of <C-P/N> like this in your vimrc: 
+
+you also can map other keys instead of <C-P/N> like this in your vimrc:
             cmap <C-J> <Plug>CmdlineCompletionBackward
             cmap <C-K> <Plug>CmdlineCompletionForward
 

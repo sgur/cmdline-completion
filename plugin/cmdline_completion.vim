@@ -1,6 +1,6 @@
 " File:        cmdline_completion.vim
 " Author:      kin9 <ljh575@gmail.com>
-" Last Change: Oct 31, 2012
+" Last Change: March 10, 2014
 "
 " Version:     0.04
 "              ----- Add search in loaded buffers support .
@@ -9,16 +9,16 @@
 "              ----- Add support cursor at anywhere of cmdline.
 "
 "
-" Description: This script let you can use CTRL-P/N to complete 
+" Description: This script let you can use CTRL-P/N to complete
 "              word in cmdline mode just like in insert mode.
 "
-"              You can use other keys instead of <C-P/N> like 
-"              this : 
+"              You can use other keys instead of <C-P/N> like
+"              this :
 "                  cmap <C-J> <Plug>CmdlineCompletionBackward
 "                  cmap <C-K> <Plug>CmdlineCompletionForward
 "
 " Install:     Drag this file into vim plugin directory.
-"           
+"
 "
 
 if exists("loaded_cmdline_completion") || &cp || version < 700
@@ -38,9 +38,9 @@ if !hasmapto('<Plug>CmdlineCompletionForward','c')
     cmap <unique> <silent> <C-N> <Plug>CmdlineCompletionForward
 endif
 
-cnoremap <silent> <Plug>CmdlineCompletionBackward 
+cnoremap <silent> <Plug>CmdlineCompletionBackward
             \ <C-\>e<SID>CmdlineCompletion(1)<CR>
-cnoremap <silent> <Plug>CmdlineCompletionForward 
+cnoremap <silent> <Plug>CmdlineCompletionForward
             \ <C-\>e<SID>CmdlineCompletion(0)<CR>
 
 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -51,14 +51,14 @@ function! s:CmdlineCompletion(backword)
     let cmdline = getcmdline()
     let cmdpos = getcmdpos() - 1
 
-    let cmdline_tail = strpart(cmdline, cmdpos) 
+    let cmdline_tail = strpart(cmdline, cmdpos)
     let cmdline = strpart(cmdline,0,cmdpos)
 
     let index = match(cmdline, '\w\+$')
     let cmd = strpart(cmdline, 0, index)
 
     " Not a word , skip completion
-    if index < 0 
+    if index < 0
         return cmdline . cmdline_tail
     endif
 
@@ -67,7 +67,7 @@ function! s:CmdlineCompletion(backword)
         let b:cc_word_prefix = strpart(cmdline, index)
         let b:cc_word_list = [b:cc_word_prefix]
         let b:cc_word_index = 0
-        let b:cc_newcmdline = "" 
+        let b:cc_newcmdline = ""
         let b:cc_pos_forward = [0,0]
         let b:cc_pos_backward = [0,0]
         let b:cc_search_status = 0
@@ -87,7 +87,7 @@ function! s:CmdlineCompletion(backword)
         let b:cc_word_index += 1
     endif
 
-    " try to search new word if index out of list range 
+    " try to search new word if index out of list range
     if ( b:cc_word_index < 0 || b:cc_word_index >= len(b:cc_word_list))
                 \ && b:cc_buffer_index <= bufnr('$')
 
@@ -96,27 +96,27 @@ function! s:CmdlineCompletion(backword)
         while b:cc_buffer_index <= bufnr('$')
 
             " search current first .
-            if b:cc_search_status_current 
+            if b:cc_search_status_current
                 let save_cursor = getpos('.')
                 let b:cc_search_status_current = s:SearchCurrent(a:backword)
                 call setpos('.', save_cursor)
                 if  b:cc_search_status_current
-                    break 
+                    break
                 endif
 
                 "
                 " search other buffers .
-            else 
+            else
                 if b:cc_buffer_index == bufnr('%')
-                    let b:cc_buffer_index += 1 
-                    continue 
+                    let b:cc_buffer_index += 1
+                    continue
                 endif
                 let b:cc_search_status =
                             \ s:SearchBuffer(a:backword,b:cc_buffer_index)
-                if b:cc_search_status 
-                    break 
+                if b:cc_search_status
+                    break
                 else
-                    let b:cc_buffer_index += 1 
+                    let b:cc_buffer_index += 1
                     let b:cc_buffer_pos = [1,0]
                 endif
             endif
@@ -130,13 +130,13 @@ function! s:CmdlineCompletion(backword)
         endif
     endif
 
-    " correct index 
+    " correct index
     if b:cc_search_status || b:cc_search_status_current
-        if b:cc_word_index < 0 
-            let b:cc_word_index = 0 
+        if b:cc_word_index < 0
+            let b:cc_word_index = 0
         endif
     else
-        if b:cc_word_index < 0 
+        if b:cc_word_index < 0
             let b:cc_word_index = len(b:cc_word_list) - 1
         elseif b:cc_word_index >= len(b:cc_word_list)
             let b:cc_word_index = 0
@@ -161,7 +161,7 @@ endfunction
 
 
 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-" search completion matched word, 
+" search completion matched word,
 " return 0 if match none, else return 1 .
 function! s:SearchCurrent(backward)
 
@@ -197,7 +197,7 @@ function! s:SearchCurrent(backward)
         let word = expand("<cword>")
 
         " add to list if not exists
-        if count(b:cc_word_list, word) == 0 
+        if count(b:cc_word_list, word) == 0
             if a:backward
                 call insert(b:cc_word_list, word)
             else
@@ -211,7 +211,7 @@ function! s:SearchCurrent(backward)
 
     endwhile
 
-    return 0 
+    return 0
 
 endfunction
 
@@ -225,11 +225,11 @@ function! s:SearchBuffer(backward,bufindex)
     while 1
 
         " get one line at once
-        let bufline = getbufline(a:bufindex, b:cc_buffer_pos[0]) 
+        let bufline = getbufline(a:bufindex, b:cc_buffer_pos[0])
 
         " Eof detected !
         if len(bufline) == 0
-            return 0 
+            return 0
         endif
 
         " start @ last position
@@ -241,7 +241,7 @@ function! s:SearchBuffer(backward,bufindex)
         else
             let b:cc_buffer_pos[1] += matchend(text,pattern)
             " add to list if not exists
-            if count(b:cc_word_list, word) == 0 
+            if count(b:cc_word_list, word) == 0
                 if a:backward
                     call insert(b:cc_word_list, word)
                 else
@@ -253,7 +253,7 @@ function! s:SearchBuffer(backward,bufindex)
 
     endwhile
 
-    return 0 
+    return 0
 
 endfunction
 
