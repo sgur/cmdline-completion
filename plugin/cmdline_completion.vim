@@ -1,5 +1,6 @@
 " File:        cmdline_completion.vim
 " Author:      kin9 <ljh575@gmail.com>
+" Modified:    sgur <sgurrr+vim@gmail.com>
 " Last Change: March 10, 2014
 "
 " Version:     0.04
