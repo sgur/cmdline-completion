@@ -40,9 +40,9 @@ if !hasmapto('<Plug>CmdlineCompletionForward','c')
 endif
 
 cnoremap <silent> <Plug>CmdlineCompletionBackward
-      \ <C-\>ecmdline_completion#complete_backword()<CR>
+      \ <C-\>e<C-u>cmdline_completion#complete_backword()<CR>
 cnoremap <silent> <Plug>CmdlineCompletionForward
-      \ <C-\>ecmdline_completion#complete_forward()<CR>
+      \ <C-\>e<C-u>cmdline_completion#complete_forward()<CR>
 
 
 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
